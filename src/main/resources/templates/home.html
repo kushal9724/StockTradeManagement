@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome, <span th:text="${username}"></span>!</h1>
+    
+    <!-- Display stocks in portfolio -->
+    <h2>Portfolio</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Gain</th>
+                <th>Quantity</th>
+                <th>Value</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="stock, stat : ${portfolio}">
+                <td th:text="${stock.symbol}"></td>
+                <td th:text="${stock.name}"></td>
+                <td th:text="${stock.price}"></td>
+                <td th:text="${stock.gain}"></td>
+        
+                <!-- Input field to adjust quantity -->
+                <td>
+                    <form th:action="@{'/' + ${username} + '/adjustQuantity'}" method="post">
+                        <input type="hidden" name="stockIndex" th:value="${stat.index}" />
+                        <!-- Pre-populate input field with current quantity -->
+                        <input type="number" name="quantity" min="1" step="1" th:value="${stock.quantity}" />
+                        <button type="submit">Adjust</button>
+                    </form>
+                </td>
+
+                <td th:text="${stock.value}"></td>
+                
+                <!-- Delete button -->
+                <td>
+                    <form th:action="@{'/' + ${username} + '/deleteStock'}" method="post">
+                        <input type="hidden" name="stockIndex" th:value="${stat.index}" />
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Button to invest -->
+    <form th:action="@{'/' + ${username} + '/invest'}" method="get">
+        <button type="submit">Invest</button>
+    </form>
+</body>
+</html>
