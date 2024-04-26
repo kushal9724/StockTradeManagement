@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.TradeManagement.Model.Stock;
+import com.example.TradeManagement.Model.StockData;
 import com.example.TradeManagement.Model.Trader;
 import com.example.TradeManagement.Model.Service.StockService;
 import com.example.TradeManagement.Model.Service.TraderService;
@@ -93,34 +94,7 @@ public class AuthController {
         model.addAttribute("username", username);
         Trader trader = traderService.getTraderByUsername(username);
         List<Stock> portfolio = trader.getPortfolio();
-        
-        // Iterate through each stock in the portfolio
-        for (Stock stock : portfolio) {
-            // Retrieve the purchase price of the stock from the database based on the date of purchase
-            double purchasePrice = stock.getPrice();
-
-            // Make an API request to retrieve the current price of the stock
-            double currentPrice = stockService.getCurrentPrice(stock.getSymbol());
-
-            // Calculate the gain for the stock
-            double gain = currentPrice - purchasePrice;
-            System.out.println("c price" + currentPrice);
-            System.out.println("p price" + purchasePrice);
-            // Set the gain for the stock
-            DecimalFormat df = new DecimalFormat("#.##");
-            String formattedValue = df.format(gain);
-            double formattedGain = Double.parseDouble(formattedValue);
-            stock.setGain(formattedGain);
-
-            try {
-                Thread.sleep(2000); // Sleep for 1 second (1000 milliseconds)
-            } catch (InterruptedException e) {
-                // Handle InterruptedException
-                System.out.println("Could not stop");
-            }
-        }
-
-
+        // List<String> stocks = trader.getStocks(portfolio);
         model.addAttribute("portfolio", portfolio);
 
         // Return the name of the Thymeleaf template to render
@@ -175,4 +149,20 @@ public class AuthController {
 
         return "redirect:/" + username + "/home";
     }
+
+
+    @GetMapping("/{tickerSymbol}/visualize")
+    public String visualize(@PathVariable String tickerSymbol,  Model model) {
+
+        // Fetch data from API
+        List<Double> stockData = stockService.fetchStockDataForVisualization(tickerSymbol);
+        
+        // Pass the fetched data to the template
+        model.addAttribute("tickerSymbol", tickerSymbol);
+        model.addAttribute("stockData", stockData);
+        
+        // Return the name of the Thymeleaf template to render
+        return "visualize";
+    }
+
 }

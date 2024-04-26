@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Trend Map</title>
+    <!-- Include necessary libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="stockChart" width="800" height="400"></canvas>
+    <!-- Loop through stockData and display each entry -->
+    <tr th:each="price, index : ${stockData}">
+        <!-- <td th:text="${index.index + 1}"></td> -->
+        <!-- <td th:text="${price}"></td> -->
+    </tr>
+
+    <script th:inline="javascript">
+        
+        /* Extract response data */
+        var responseData = /*[[${stockData}]]*/ [];
+        console.log(responseData);
+        /* Prepare data for Chart.js */
+        var labels = Array.from({ length: responseData.length }, (_, i) => i + 1); // Generate labels from 1 to n
+        var prices = responseData;
+
+        /* Create Chart.js chart */
+        var ctx = document.getElementById('stockChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Stock Price',
+                    data: prices,
+                    borderColor: 'blue',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Time'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Price'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

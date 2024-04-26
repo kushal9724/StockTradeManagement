@@ -17,6 +17,16 @@
         <input type="number" id="quantity" name="quantity" required><br>
         
         <button type="submit">Submit</button>
+        <!-- Add an onclick event to redirect to the visualize page -->
+        <button type="button" onclick="redirectToVisualize()">Visualize</button>
     </form>
+    
+    <!-- JavaScript function to redirect to the visualize page -->
+    <script>
+        function redirectToVisualize() {
+            var stockTicker = document.getElementById('ticker').value;
+            window.location.href =  '/' + stockTicker + '/visualize';
+        }
+    </script>
 </body>
 </html>

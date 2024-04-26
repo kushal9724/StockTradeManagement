@@ -1,6 +1,7 @@
 package com.example.TradeManagement.Model.Service;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,9 @@ public class TraderService {
 
     @Autowired
     private TraderRepository traderRepository;
+
+    @Autowired
+    private StockService stockService;
 
     public Trader registerTrader(Trader trader) {
         // Additional validation, encryption of password, etc.
@@ -111,5 +115,21 @@ public class TraderService {
             throw new IllegalArgumentException("Invalid stock index");
         }
     }
+
+    // public List<String> getStocks(List<Stock> portfolio) {
+    //     List<Double> c_value = new ArrayList<>();
+    //     Double price ;
+
+    //     for (Stock stock : portfolio ) {
+    //         price = stockService.getCurrentPrice(stock.getSymbol());
+    //         c_value.ad
+    //     }
+
+
+    //     return stocks;
+    // }
+
     // Other methods for updating portfolio, buying/selling stocks, etc.
+
+
 }
